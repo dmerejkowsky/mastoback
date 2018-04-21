@@ -1,3 +1,5 @@
+from typing import Any
+
 from mastoback import Toot
 
 import pymongo
@@ -17,6 +19,12 @@ class Store():
             return 0
         latest_id: int = latest["id"]
         return latest_id
+
+    def drop(self) -> None:
+        self.collection.drop()
+
+    def get_by_id(self, id: int) -> Any:
+        return self.collection.find_one({"id": id})
 
     def add_toot(self, toot: Toot) -> None:
         self.collection.insert({

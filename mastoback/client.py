@@ -4,7 +4,6 @@ from mastodon import Mastodon
 
 from mastoback import Status
 from mastoback.config import read_config
-import mastoback.store
 
 MAX_TOOTS = 200
 
@@ -35,24 +34,3 @@ def yield_statuses(mastodon: Mastodon, account_id: int, *,
         statuses = mastodon.fetch_next(statuses)
         if statuses:
             yield from statuses
-
-
-def main() -> None:
-    mastodon = login()
-    account = mastodon.account_verify_credentials()
-    print("Logged in as", account.username)
-    store = mastoback.store.Store()
-    latest_id = store.get_latest_id()
-    i = 0
-    for status in yield_statuses(mastodon, account.id, since_id=latest_id, limit=200):
-        toot = mastoback.toot_from_status(status)
-        store.add_toot(toot)
-        i += 1
-    if i:
-        print("Stored", i, "new toots")
-    else:
-        print("No new toots")
-
-
-if __name__ == "__main__":
-    main()

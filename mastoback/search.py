@@ -1,41 +1,43 @@
+from path import Path
+from typing import Generator
+
 import whoosh.index
 import whoosh.fields
 import whoosh.qparser
 
-schema = whoosh.fields.Schema(
-    title=whoosh.fields.TEXT(stored=True),
-    path=whoosh.fields.ID(stored=True),
-    content=whoosh.fields.TEXT
-)
+from mastoback import Toot
 
-index = whoosh.index.create_in("indexdir", schema)
 
-writer = index.writer()
-writer.add_document(
-    title="First document",
-    path="/a",
-    content="This is the first document"
-)
+class Index():
+    def __init__(self, index_path: Path, drop: bool = False) -> None:
 
-writer.add_document(
-    title="Second document",
-    path="/b",
-    content="This is the second document"
-)
+        schema = whoosh.fields.Schema(
+            id=whoosh.fields.ID(stored=True),
+            text=whoosh.fields.TEXT
+        )
 
-writer.commit()
+        if drop:
+            index_path.rmtree_p()
+            index_path.mkdir()
+        else:
+            index_path.mkdir_p()
 
-index = whoosh.index.open_dir("indexdir")
-writer = index.writer()
-writer.add_document(
-    title="First doc bis",
-    path="/c",
-    content="there's more than one first",
-)
-writer.commit()
+        index_exists = whoosh.index.exists_in(index_path)
+        if index_exists:
+            self.index = whoosh.index.open_dir(index_path)
+        else:
+            self.index = whoosh.index.create_in(index_path, schema)
+        self.writer = self.index.writer()
 
-with index.searcher() as searcher:
-    query = whoosh.qparser.QueryParser("content", index.schema).parse("first")
-    results = searcher.search(query)
-    for result in results:
-        print(result)
+    def add_toot(self, toot: Toot) -> None:
+        self.writer.add_document(id=toot.id, text=toot.text)
+
+    def commit(self) -> None:
+        self.writer.commit()
+
+    def search_text(self, query: str) -> Generator[int, None, None]:
+        with self.index.searcher() as searcher:
+            query = whoosh.qparser.QueryParser("text", self.index.schema).parse(query)
+            results = searcher.search(query)
+            for result in results:
+                yield result.id
