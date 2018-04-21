@@ -53,13 +53,15 @@ def extract_text(status: Status) -> str:
 
 
 class Toot:
-    def __init__(self, toot_id: int, text: str, status: Status) -> None:
+    def __init__(self, toot_id: int, text: str, url: str, status: Status) -> None:
         self.status = status
         self.text = text
         self.id = toot_id
+        self.url = url
 
 
 def toot_from_status(status: Status) -> Toot:
     text = extract_text(status)
     status_id = status["id"]
-    return Toot(status_id, text, status)
+    url = status["url"]
+    return Toot(status_id, text, url, status)

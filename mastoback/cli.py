@@ -51,7 +51,8 @@ def search(query: str) -> None:
     for toot_id in index.search_text(query):
         toot = store.get_by_id(toot_id)
         print("-" * 80)
-        print(toot.id, toot.text.strip())
+        print(toot.text.strip())
+        print(toot.url)
         print()
 
 

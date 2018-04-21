@@ -26,6 +26,7 @@ class Store():
         return Toot(
             from_db["id"],
             from_db["text"],
+            from_db["url"],
             from_db["status"],
         )
 
@@ -33,5 +34,6 @@ class Store():
         self.collection.insert({
             "id": toot.id,
             "status": toot.status,
-            "text": toot.text
+            "text": toot.text,
+            "url": toot.url,
         })
