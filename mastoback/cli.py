@@ -47,10 +47,12 @@ def fetch(drop: bool = False) -> None:
 def search(query: str) -> None:
     store = mastoback.store.Store()
     index = open_index(drop=False)
-    print("Looking for", query, "in index")
+    print("Looking for", query, "in index ...")
     for toot_id in index.search_text(query):
         toot = store.get_by_id(toot_id)
-        print(toot["text"])
+        print("-" * 80)
+        print(toot.id, toot.text.strip())
+        print()
 
 
 @click.group()
