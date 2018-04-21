@@ -50,7 +50,7 @@ def search(query: str) -> None:
     print("Looking for", query, "in index")
     for toot_id in index.search_text(query):
         toot = store.get_by_id(toot_id)
-        print(toot.text)
+        print(toot["text"])
 
 
 @click.group()
