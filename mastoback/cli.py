@@ -8,11 +8,11 @@ import mastoback.config
 
 def get_index_path() -> Path:
     config = mastoback.config.read_config()
-    from_conf = config["search"]["index_path"]
+    from_conf = config["index_path"]
     return Path(from_conf)
 
 
-def open_index(drop=False):
+def open_index(drop: bool = False) -> mastoback.search.Index:
     index_path = get_index_path()
     return mastoback.search.Index(index_path, drop=drop)
 
