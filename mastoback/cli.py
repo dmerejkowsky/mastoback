@@ -1,4 +1,5 @@
 import click
+from path import Path
 import mastoback.client
 import mastoback.store
 import mastoback.search
@@ -15,7 +16,8 @@ def fetch(drop: bool = False) -> None:
         store.drop()
 
     latest_id = store.get_latest_id()
-    index = mastoback.search.Index(drop=drop)
+    index_path = Path("index")
+    index = mastoback.search.Index(index_path, drop=drop)
     i = 0
     for status in mastoback.client.yield_statuses(mastodon, account.id, since_id=latest_id, limit=200):
         toot = mastoback.toot_from_status(status)
