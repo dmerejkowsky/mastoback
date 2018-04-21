@@ -1,6 +1,18 @@
+from typing import Any, Dict, Generator, NewType
 from mastoback import Toot
 
 import pymongo
+
+Doc = NewType('Doc', Dict[str, Any])
+
+
+def toot_from_doc(doc: Doc) -> Toot:
+    return Toot(
+        doc["id"],
+        doc["text"],
+        doc["url"],
+        doc["status"],
+    )
 
 
 class Store():
@@ -22,13 +34,18 @@ class Store():
         self.collection.drop()
 
     def get_by_id(self, id: int) -> Toot:
-        from_db = self.collection.find_one({"id": id})
-        return Toot(
-            from_db["id"],
-            from_db["text"],
-            from_db["url"],
-            from_db["status"],
+        doc = self.collection.find_one({"id": id})
+        return toot_from_doc(doc)
+
+    def get_latest_toots(self, num: int) -> Generator[Toot, None, None]:
+        docs = (
+            self.collection
+                .find()
+                .sort([('id', pymongo.DESCENDING)])
+                .limit(num)
         )
+        for doc in docs:
+            yield toot_from_doc(doc)
 
     def add_toot(self, toot: Toot) -> None:
         self.collection.insert({

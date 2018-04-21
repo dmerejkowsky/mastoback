@@ -1,5 +1,9 @@
+import sys
+
 import click
 from path import Path
+
+from mastoback import Toot
 import mastoback.client
 import mastoback.store
 import mastoback.search
@@ -47,13 +51,29 @@ def fetch(drop: bool = False) -> None:
 def search(query: str) -> None:
     store = mastoback.store.Store()
     index = open_index(drop=False)
-    print("Looking for", query, "in index ...")
-    for toot_id in index.search_text(query):
+    ids = list(index.search_text(query))
+    if not ids:
+        sys.exit("No toot found matching query")
+    print("Found", len(ids), "results")
+    for toot_id in ids:
         toot = store.get_by_id(toot_id)
-        print("-" * 80)
-        print(toot.text.strip())
-        print(toot.url)
-        print()
+        print_toot(toot)
+
+
+@click.command()
+@click.argument("n", type=int)
+def latest(n: int) -> None:
+    store = mastoback.store.Store()
+    toots = store.get_latest_toots(num=n)
+    for toot in toots:
+        print_toot(toot)
+
+
+def print_toot(toot: Toot) -> None:
+    print("-" * 80)
+    print(toot.text.strip())
+    print(toot.url)
+    print()
 
 
 @click.group()
@@ -61,5 +81,6 @@ def cli() -> None:
     pass
 
 
-cli.add_command(search)
 cli.add_command(fetch)
+cli.add_command(latest)
+cli.add_command(search)
