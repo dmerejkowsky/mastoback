@@ -40,4 +40,4 @@ class Index():
             query = whoosh.qparser.QueryParser("text", self.index.schema).parse(query)
             results = searcher.search(query)
             for result in results:
-                yield result.id
+                yield int(result["id"])
