@@ -20,7 +20,7 @@ class Index():
             index_path.rmtree_p()
             index_path.mkdir()
         else:
-            index_path.mkdir_p()
+            index_path.makedirs_p()
 
         index_exists = whoosh.index.exists_in(index_path)
         if index_exists:
