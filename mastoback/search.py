@@ -30,7 +30,7 @@ class Index():
         self.writer = self.index.writer()
 
     def add_toot(self, toot: Toot) -> None:
-        self.writer.add_document(id=toot.id, text=toot.text)
+        self.writer.add_document(id=str(toot.id), text=toot.text)
 
     def commit(self) -> None:
         self.writer.commit()
