@@ -1,3 +1,4 @@
 *.secret
 token
 indexdir
+.mypy_cache/
