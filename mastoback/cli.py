@@ -22,6 +22,7 @@ def fetch(drop: bool = False) -> None:
     for status in mastoback.client.yield_statuses(mastodon, account.id, since_id=latest_id, limit=200):
         toot = mastoback.toot_from_status(status)
         store.add_toot(toot)
+        index.add_toot(toot)
         i += 1
     if i:
         print("Stored", i, "new toots")
