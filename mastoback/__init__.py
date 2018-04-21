@@ -53,10 +53,10 @@ def extract_text(status: Status) -> str:
 
 
 class Toot:
-    def __init__(self, id: int, text: str, status: Status) -> None:
+    def __init__(self, toot_id: int, text: str, status: Status) -> None:
         self.status = status
         self.text = text
-        self.id = status["id"]
+        self.id = toot_id
 
 
 def toot_from_status(status: Status) -> Toot:
