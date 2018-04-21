@@ -3,6 +3,18 @@ from path import Path
 import mastoback.client
 import mastoback.store
 import mastoback.search
+import mastoback.config
+
+
+def get_index_path() -> Path:
+    config = mastoback.config.read_config()
+    from_conf = config["search"]["index_path"]
+    return Path(from_conf)
+
+
+def open_index(drop=False):
+    index_path = get_index_path()
+    return mastoback.search.Index(index_path, drop=drop)
 
 
 @click.command()
@@ -15,9 +27,8 @@ def fetch(drop: bool = False) -> None:
     if drop:
         store.drop()
 
+    index = open_index(drop=drop)
     latest_id = store.get_latest_id()
-    index_path = Path("index")
-    index = mastoback.search.Index(index_path, drop=drop)
     i = 0
     for status in mastoback.client.yield_statuses(mastodon, account.id, since_id=latest_id, limit=200):
         toot = mastoback.toot_from_status(status)
@@ -35,7 +46,7 @@ def fetch(drop: bool = False) -> None:
 @click.argument("query")
 def search(query: str) -> None:
     store = mastoback.store.Store()
-    index = mastoback.search.Index()
+    index = open_index(drop=False)
     print("Looking for", query, "in index")
     for toot_id in index.search_text(query):
         toot = store.get_by_id(toot_id)
