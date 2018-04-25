@@ -57,7 +57,7 @@ Because I can.
 
 I'm lazy and I wanted to store the whole data returned by the Mastodon API "just in case". Mongo is nice for this.
 
-* Why Pythno 3.6 only ?
+* Why Python 3.6 only ?
 
 Because I wanted to play with mypy and I prefer type annotations to `# type:` comments
 
