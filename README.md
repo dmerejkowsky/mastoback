@@ -6,7 +6,9 @@ Searchable backup of mastodon toots
 
 Python **3.6** or higher
 
-MongoDB 
+MongoDB server up and running
+
+Use `pipenv` to install the rest of Python deps
 
 # Setup
 
