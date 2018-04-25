@@ -2,7 +2,7 @@
 
 Searchable backup of mastodon toots
 
-# Requiremnts
+# Requirements
 
 Python **3.6** or higher
 
