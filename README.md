@@ -63,7 +63,7 @@ Because I wanted to play with mypy and I prefer type annotations to `# type:` co
 
 * What's next ?
 
-Nothing. I have no plan on adding features to this project, I just wanted a searchable backup from the command line.
+Nothing. I just wanted a searchable backup of my toots from the command line, so I don't think any new feature needs to be added.
 
 I could spend more time on the conversion from html to text maybe, but apart from that I consider this project done.
 
