@@ -2,6 +2,10 @@
 
 Searchable backup of mastodon toots
 
+*Note: this project is no longer maintained. Feel free to use [yarfox](https://github.com/dmerejkowsky/yarfox) for an alternative.*
+
+*(It can cross-post to twitter, and does not depend on MongoDB ...)*
+
 # Requirements
 
 Python **3.6** or higher
@@ -68,4 +72,3 @@ Because I wanted to play with mypy and I prefer type annotations to `# type:` co
 Nothing. I just wanted a searchable backup of my toots from the command line, so I don't think any new feature needs to be added.
 
 I could spend more time on the conversion from html to text maybe, but apart from that I consider this project done.
-
